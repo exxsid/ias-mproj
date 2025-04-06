@@ -2,13 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { app } from "@/lib/firebase";
-import {
-  getFirestore,
-  doc,
-  setDoc,
-  collection,
-  addDoc,
-} from "firebase/firestore";
+import Image from "next/image";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
 
 // Types
 interface CarouselImage {
@@ -74,10 +69,11 @@ const TrustBridgeBankLogin: React.FC = () => {
               {/* Left side - Carousel */}
               <div className="w-full md:w-1/2 bg-blue-900 p-4 relative">
                 <div className="relative h-64 md:h-96">
-                  <img
+                  <Image
                     src={carouselImages[currentImageIndex].src}
                     alt={carouselImages[currentImageIndex].alt}
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
                   />
                   {/* Carousel navigation */}
                   <button
